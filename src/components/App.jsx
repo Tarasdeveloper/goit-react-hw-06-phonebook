@@ -1,64 +1,60 @@
-import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
-import ContactList from './ContactList/ContactList';
 import Wrapper from './Wrapper/Wrapper';
-import { nanoid } from '@reduxjs/toolkit';
+import ContactList from './ContactList/ContactList';
+import {
+  addContact,
+  deleteContact,
+  setFilterTerm,
+} from 'redux/phonebookActions';
 
-export default function App() {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
+const App = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.phonebook.contacts);
+  const filterTerm = useSelector(state => state.phonebook.filter);
 
-  useEffect(() => {
-    const savedContacts = localStorage.getItem('contacts');
-    if (savedContacts) {
-      setContacts(JSON.parse(savedContacts));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
-
-  const addContact = event => {
-    const contact = {
-      id: nanoid(),
-      name: event.name,
-      tel: event.tel,
+  const handleAddContact = newContactData => {
+    const newContactEntity = {
+      ...newContactData,
     };
 
-    const existingContact = contacts.find(
-      elem => contact.name.toLowerCase() === elem.name.toLowerCase()
-    );
-
-    if (existingContact) {
-      alert(`${contact.name} is already in contacts.`);
+    if (!checkNewContactPresence(newContactEntity.name)) {
+      dispatch(addContact(newContactEntity));
     } else {
-      setContacts(prevContacts => [contact, ...prevContacts]);
+      alert(`${newContactEntity.name} is already in contacts!`);
     }
   };
 
-  const changeFilter = event => {
-    setFilter(event.currentTarget.value);
+  const handleDeleteContact = contactId => {
+    dispatch(deleteContact(contactId));
   };
 
-  const deleteContact = id => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== id)
-    );
+  const handleFilterContactsByName = ({ target: { value } }) => {
+    dispatch(setFilterTerm(value));
   };
 
-  const filterContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
+  const checkNewContactPresence = contactName => {
+    return contacts.some(contact => contact.name === contactName);
+  };
+
+  const contactsFilteredByName = contacts?.filter(contact =>
+    contact.name.toLowerCase().includes(filterTerm.toLowerCase())
   );
 
   return (
     <Wrapper>
       <h1>Phonebook</h1>
-      <ContactForm onSubmit={addContact} />
+      <ContactForm addContact={handleAddContact} />
       <h2>Contacts</h2>
-      <Filter value={filter} onChange={changeFilter} />
-      <ContactList data={filterContacts} onDeleteContact={deleteContact} />
+      <Filter filter={filterTerm} onChange={handleFilterContactsByName} />
+      <ContactList
+        contacts={contactsFilteredByName}
+        filter={filterTerm}
+        onDelete={handleDeleteContact}
+      />
     </Wrapper>
   );
-}
+};
+
+export default App;
