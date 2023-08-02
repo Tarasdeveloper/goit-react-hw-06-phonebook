@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import ContactForm from './ContactForm/ContactForm';
-import Filter from './Filter/Filter';
 import Wrapper from './Wrapper/Wrapper';
 import ContactList from './ContactList/ContactList';
 import {
@@ -8,6 +7,7 @@ import {
   deleteContact,
   setFilterTerm,
 } from 'redux/phonebookActions';
+import Filter from './Filter/Filter';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -50,7 +50,6 @@ const App = () => {
       <Filter filter={filterTerm} onChange={handleFilterContactsByName} />
       <ContactList
         contacts={contactsFilteredByName}
-        filter={filterTerm}
         onDelete={handleDeleteContact}
       />
     </Wrapper>
