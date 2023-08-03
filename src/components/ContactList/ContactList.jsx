@@ -4,12 +4,17 @@ import { useSelector } from 'react-redux';
 
 const ContactList = ({ onDelete }) => {
   const contacts = useSelector(state => state.phonebook.contacts);
+  const filterTerm = useSelector(state => state.phonebook.filter);
+  const contactsFilteredByName = contacts?.filter(contact =>
+    contact.name.toLowerCase().includes(filterTerm.toLowerCase())
+  );
+
   return (
     <div>
       <ListContacts>
         {contacts.length === 0 && <p>There are no contacts found!</p>}
         {contacts.length > 0 &&
-          contacts.map(({ id, name, number }) => {
+          contactsFilteredByName.map(({ id, name, number }) => {
             return (
               <ContactsItem key={id}>
                 <span>{name}</span>:&nbsp;{number}

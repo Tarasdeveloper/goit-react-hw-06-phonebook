@@ -1,3 +1,4 @@
+import React from 'react';
 import { FilterInput, FilterLabel } from './Filter.styled';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFilterTerm } from 'redux/phonebookActions';

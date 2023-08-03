@@ -16,7 +16,7 @@ import phonebook from './phonebookReducer';
 const phonebookPersistConfig = {
   key: 'user',
   storage,
-  blacklist: ['filter'],
+  blacklist: [''],
 };
 
 const store = configureStore({

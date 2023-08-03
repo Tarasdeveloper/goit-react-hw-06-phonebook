@@ -1,16 +1,36 @@
 import React, { useState } from 'react';
 import { AddButton, Form, FormInput, FormLabel } from './ContactForm.styled';
+import { addContact, deleteContact } from 'redux/phonebookActions';
+import { useDispatch, useSelector } from 'react-redux';
 
 const INITIAL_FORM_STATE = {
   name: '',
   number: '',
 };
 
-export default function ContactForm({ addContact }) {
+export default function ContactForm() {
   const [formData, setFormData] = useState(INITIAL_FORM_STATE);
+  const contacts = useSelector(state => state.phonebook.contacts);
+  const dispatch = useDispatch();
 
   const handleInputsChange = ({ target: { name, value } }) => {
     setFormData(prevState => ({ ...prevState, [name]: value }));
+  };
+
+  const checkNewContactPresence = contactName => {
+    return contacts.some(contact => contact.name === contactName);
+  };
+
+  const handleAddContact = newContactData => {
+    const newContactEntity = {
+      ...newContactData,
+    };
+
+    if (!checkNewContactPresence(newContactEntity.name)) {
+      dispatch(addContact(newContactEntity));
+    } else {
+      alert(`${newContactEntity.name} is already in contacts!`);
+    }
   };
 
   const handleSubmit = event => {
@@ -21,7 +41,7 @@ export default function ContactForm({ addContact }) {
       number: formData.number,
     };
 
-    addContact(newContact);
+    handleAddContact(newContact);
     setFormData({ number: '', name: '' });
   };
 

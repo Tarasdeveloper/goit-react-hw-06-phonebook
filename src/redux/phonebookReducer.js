@@ -15,7 +15,6 @@ export default createReducer(initialState, {
       contact => contact.id !== action.payload
     );
   },
-
   [setFilterTerm]: (state, action) => {
     state.filter = action.payload;
   },
