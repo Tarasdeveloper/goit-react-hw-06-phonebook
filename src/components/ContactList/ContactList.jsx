@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { ContactsItem, DeleteBtn, ListContacts } from './ContactList.styled';
+import { useSelector } from 'react-redux';
 
-const ContactList = ({ contacts, onDelete }) => {
+const ContactList = ({ onDelete }) => {
+  const contacts = useSelector(state => state.phonebook.contacts);
   return (
     <div>
       <ListContacts>
@@ -23,13 +25,6 @@ const ContactList = ({ contacts, onDelete }) => {
 };
 
 ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    }).isRequired
-  ).isRequired,
   onDelete: PropTypes.func.isRequired,
 };
 

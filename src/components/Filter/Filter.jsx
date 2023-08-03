@@ -1,18 +1,25 @@
-import PropTypes from 'prop-types';
 import { FilterInput, FilterLabel } from './Filter.styled';
+import { useSelector, useDispatch } from 'react-redux';
+import { setFilterTerm } from 'redux/phonebookActions';
 
-const Filter = ({ value, onChange }) => {
+const Filter = () => {
+  const dispatch = useDispatch();
+  const filterValue = useSelector(state => state.phonebook.filter);
+
+  const handleFilterChange = ({ target }) => {
+    dispatch(setFilterTerm(target.value));
+  };
+
   return (
     <FilterLabel>
       Find contacts by name
-      <FilterInput type="text" value={value} onChange={onChange} />
+      <FilterInput
+        type="text"
+        value={filterValue}
+        onChange={handleFilterChange}
+      />
     </FilterLabel>
   );
-};
-
-Filter.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func,
 };
 
 export default Filter;
