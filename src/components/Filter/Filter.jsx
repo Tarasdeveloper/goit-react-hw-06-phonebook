@@ -7,8 +7,8 @@ const Filter = () => {
   const dispatch = useDispatch();
   const filterValue = useSelector(state => state.phonebook.filter);
 
-  const handleFilterChange = ({ target }) => {
-    dispatch(setFilterTerm(target.value));
+  const handleFilterContactsByName = ({ target: { value } }) => {
+    dispatch(setFilterTerm(value));
   };
 
   return (
@@ -17,7 +17,7 @@ const Filter = () => {
       <FilterInput
         type="text"
         value={filterValue}
-        onChange={handleFilterChange}
+        onChange={handleFilterContactsByName}
       />
     </FilterLabel>
   );

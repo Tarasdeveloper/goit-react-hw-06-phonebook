@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AddButton, Form, FormInput, FormLabel } from './ContactForm.styled';
-import { addContact, deleteContact } from 'redux/phonebookActions';
+import { addContact } from 'redux/phonebookActions';
 import { useDispatch, useSelector } from 'react-redux';
 
 const INITIAL_FORM_STATE = {
